@@ -137,8 +137,7 @@ const authorizationHeader = {
   "Api-Version": "2.0",
   "Content-Type": "application/json",
   Accept: "application/json",
-  Authorization:
-    "Bearer eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIzNTk4NzEiLCJqdGkiOiI2NWNjMDExY2QwOTU1MDA4NmNlZjI4ZDQiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaXNBY3RpdmUiOnRydWUsInNjb3BlIjpbImludGVyYWN0aXZlIiwiaGlzdG9yaWNhbCJdLCJpYXQiOjE3MDc4Njg0NDQsImlzcyI6InVkYXBpLWdhdGV3YXktc2VydmljZSIsImV4cCI6MTcwNzk0ODAwMH0.z_v6G-QDFdW_d_Cy1_aOpelSMEcMpXe597w0Uy7Jv6E",
+  Authorization: "Bearer eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIzNTk4NzEiLCJqdGkiOiI2NWNjMDExY2QwOTU1MDA4NmNlZjI4ZDQiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaXNBY3RpdmUiOnRydWUsInNjb3BlIjpbImludGVyYWN0aXZlIiwiaGlzdG9yaWNhbCJdLCJpYXQiOjE3MDc4Njg0NDQsImlzcyI6InVkYXBpLWdhdGV3YXktc2VydmljZSIsImV4cCI6MTcwNzk0ODAwMH0.z_v6G-QDFdW_d_Cy1_aOpelSMEcMpXe597w0Uy7Jv6E",
   Cookie: "_cfuvid=YOUR_COOKIE",
 };
 
@@ -157,7 +156,7 @@ async function executeBuy(quantity, price, instrumentToken) {
       transaction_type: "BUY",
       disclosed_quantity: 0,
       trigger_price: 0,
-      is_amo: false,
+      is_amo: true,
     };
 
     let buyConfig = {
@@ -174,7 +173,7 @@ async function executeBuy(quantity, price, instrumentToken) {
     if (buyResponse.data.status === "success") {
       const orderId = buyResponse.data.data.order_id;
       console.log("Order ID:", orderId);
-      return orderId;
+      await waitForCompletionAndSell(quantity, price, instrumentToken, orderId);
     }
   } catch (error) {
     console.log(error);
@@ -221,45 +220,51 @@ async function executeSell(
   }
 }
 
-async function checkAndExecuteSell(quantity, price, instrumentToken, orderId) {
+async function waitForCompletionAndSell(quantity, price, instrumentToken, orderId) {
   try {
-    let config = {
-      method: "get",
-      maxBodyLength: Infinity,
-      url: `https://api.upstox.com/v2/order/history?order_id=${orderId}`,
-      headers: authorizationHeader,
-    };
+    let completed = false;
+    while (!completed) {
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: `https://api.upstox.com/v2/order/history?order_id=${orderId}`,
+        headers: authorizationHeader,
+      };
 
-    const response = await axios.request(config);
-    console.log(JSON.stringify(response.data));
+      const response = await axios.request(config);
+      console.log(JSON.stringify(response.data));
 
-    const orders = response.data.data;
-    const completedOrder = orders.find((order) => order.status === "complete");
+      const orders = response.data.data;
+      const completedOrder = orders.find((order) => order.status === "complete");
 
-    if (completedOrder) {
-      await executeSell(
-        quantity,
-        price,
-        instrumentToken,
-        orderId,
-        completedOrder.price,
-      );
-    } else {
-      console.log("No completed order found.");
+      if (completedOrder) {
+        await executeSell(
+          quantity,
+          price,
+          instrumentToken,
+          orderId,
+          completedOrder.price,
+        );
+        completed = true;
+      } else {
+        console.log("Order is not yet complete. Waiting...");
+        await sleep(5000); // Wait for 5 seconds before checking again
+      }
     }
   } catch (error) {
     console.log(error);
   }
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function getUserInput() {
   rl.question("Enter quantity: ", async (quantity) => {
     rl.question("Enter price: ", async (price) => {
       rl.question("Enter instrument token: ", async (instrumentToken) => {
-        const orderId = await executeBuy(quantity, price, instrumentToken);
-        if (orderId) {
-          await checkAndExecuteSell(quantity, price, instrumentToken, orderId);
-        }
+        await executeBuy(quantity, price, instrumentToken);
         rl.close();
       });
     });
