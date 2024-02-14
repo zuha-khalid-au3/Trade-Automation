@@ -156,7 +156,7 @@ async function executeBuy(quantity, price, instrumentToken) {
       transaction_type: "BUY",
       disclosed_quantity: 0,
       trigger_price: 0,
-      is_amo: true,
+      is_amo: false,
     };
 
     let buyConfig = {
