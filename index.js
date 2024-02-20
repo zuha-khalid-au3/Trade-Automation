@@ -166,19 +166,7 @@ async function executeBuy(quantity, price, instrumentToken) {
       method: "post",
       maxBodyLength: Infinity,
       url: "https://api.upstox.com/v2/order/place",
-<<<<<<< HEAD
       headers: authorizationHeader,
-=======
-      headers: {
-        "Api-Version": "2.0",
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization:
-          `Bearer ${token}`,
-        Cookie:
-          "_cfuvid=Z3lT3BM07S5rqOrx_qUviwo16h6Mr4fT4k3cHzNaA0I-1707689841077-0-604800000",
-      },
->>>>>>> e25db42 (getInstrumentKey)
       data: buyData,
     };
 
@@ -186,58 +174,9 @@ async function executeBuy(quantity, price, instrumentToken) {
     console.log(JSON.stringify(buyResponse.data));
 
     if (buyResponse.data.status === "success") {
-<<<<<<< HEAD
       const orderId = buyResponse.data.data.order_id;
       console.log("Order ID:", orderId);
       await waitForCompletionAndSell(quantity, price, instrumentToken, orderId);
-=======
-      // Get the price from buyData
-      let buyPrice = price;
-      console.log("Buy Price:", buyPrice);
-
-      // Calculate sell price based on buy price
-      let sellPrice = buyPrice + 1;
-      console.log("Sell Price:", sellPrice);
-
-      // Execute the SELL order here after 1 second delay
-      setTimeout(async () => {
-        // Sell order data
-        let sellData = JSON.stringify({
-          quantity: quantity,
-          product: "D",
-          validity: "DAY",
-          price: sellPrice,
-          tag: "string",
-          instrument_token: instrumentToken,
-          order_type: orderType,
-          transaction_type: "SELL",
-          disclosed_quantity: 0,
-          trigger_price: 0,
-          is_amo: false,
-        });
-
-        // Sell order configuration
-        let sellConfig = {
-          method: "post",
-          maxBodyLength: Infinity,
-          url: "https://api.upstox.com/v2/order/place",
-          headers: {
-            "Api-Version": "2.0",
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization:
-            `Bearer ${token}`,
-            Cookie:
-              "_cfuvid=Z3lT3BM07S5rqOrx_qUviwo16h6Mr4fT4k3cHzNaA0I-1707689841077-0-604800000",
-          },
-          data: sellData,
-        };
-
-        // Send sell order request
-        const sellResponse = await axios.request(sellConfig);
-        console.log(JSON.stringify(sellResponse.data)); // Log the response of the SELL request
-      }, 1000); // 1 second delay for selling after buying
->>>>>>> e25db42 (getInstrumentKey)
     }
   } catch (error) {
     console.log(error);
