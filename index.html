@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electron App</title>
+</head>
+<body>
+  <button id="startProcess">Start Authentication Process</button>
+  <script>
+    const { ipcRenderer } = window;
+
+    document.getElementById('startProcess').addEventListener('click', () => {
+      ipcRenderer.send('openExternalURL', 'https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=450f5a3d-24a0-4660-8552-5e84eaa857c2&redirect_uri=http://localhost:3000/callback');
+    });
+
+    ipcRenderer.on('authorizationResponse', (event, currentURL) => {
+      if (currentURL.startsWith('http://localhost:3000/callback')) {
+        console.log('Authorization response:', currentURL);
+        // Handle the response URL as needed
+      }
+    });
+  </script>
+</body>
+</html>
