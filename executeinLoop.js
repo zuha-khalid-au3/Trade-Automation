@@ -1,10 +1,10 @@
 const axios = require("axios");
 
 // Default symbol
-const symbol = "BSE_FO|858629";
+const symbol = "NSE_FO|44354";
 
 // Default quantity and is_amo
-const quantity = 120;
+const quantity = 200;
 const is_amo = false;
 
 // Common headers object
@@ -12,7 +12,7 @@ const commonHeaders = {
   "Api-Version": "2.0",
   Accept: "application/json",
   Authorization:
-    "Bearer eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIzNTk4NzEiLCJqdGkiOiI2NjBmZDk1NWM3ZGY5MjEzNWQzMGM4NDYiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaXNBY3RpdmUiOnRydWUsInNjb3BlIjpbImludGVyYWN0aXZlIiwiaGlzdG9yaWNhbCJdLCJpYXQiOjE3MTIzMTQ3MDksImlzcyI6InVkYXBpLWdhdGV3YXktc2VydmljZSIsImV4cCI6MTcxMjM1NDQwMH0.FVPYu65gUKhpk-9PSaBC0ZYRN_ML53i07JegkodmgHE", // Replace with your actual auth token
+    "Bearer eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIzNTk4NzEiLCJqdGkiOiI2NjE0ZGJmNmJjNzYxMzMxNDk3N2RjYzUiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaXNBY3RpdmUiOnRydWUsInNjb3BlIjpbImludGVyYWN0aXZlIiwiaGlzdG9yaWNhbCJdLCJpYXQiOjE3MTI2NDMwNjIsImlzcyI6InVkYXBpLWdhdGV3YXktc2VydmljZSIsImV4cCI6MTcxMjcwMDAwMH0.0M8wYwFgExqEfOvsLKX6NyVWfMB8bwVimDGL97MT5OY", // Replace with your actual auth token
   Cookie: "your_cookie_info", // Replace with your actual cookie info
 };
 
@@ -62,7 +62,8 @@ function placeBuyOrder(instrumentToken, lastPrice) {
 
 // Function to place sell order
 function placeSellOrder(instrumentToken, buyPrice) {
-  const sellPrice = parseFloat(buyPrice) + 1; // Increase the buy price by 1 for selling
+  console.log(instrumentToken);
+  const sellPrice = parseFloat(buyPrice) + 0.5; // Increase the buy price by 1 for selling
   console.log("Sell order price: " + sellPrice);
   const data = JSON.stringify({
     quantity: quantity,
@@ -117,7 +118,7 @@ function checkOrderStatusWithRetry(orderId, retryCount = 3) {
               checkOrderStatusWithRetry(orderId, retryCount - 1)
                 .then(resolve)
                 .catch(reject);
-            }, 2000);
+            }, 1000);
           }
         } else {
           if (retryCount > 0) {
@@ -126,7 +127,7 @@ function checkOrderStatusWithRetry(orderId, retryCount = 3) {
               checkOrderStatusWithRetry(orderId, retryCount - 1)
                 .then(resolve)
                 .catch(reject);
-            }, 2000);
+            }, 1000);
           } else {
             reject("Failed to fetch order status.");
           }
@@ -139,7 +140,7 @@ function checkOrderStatusWithRetry(orderId, retryCount = 3) {
             checkOrderStatusWithRetry(orderId, retryCount - 1)
               .then(resolve)
               .catch(reject);
-          }, 2000);
+          }, 1000);
         } else {
           reject(error);
         }
@@ -174,7 +175,7 @@ function checkSellOrderStatusWithRetry(orderId, retryCount = 3) {
               checkSellOrderStatusWithRetry(orderId, retryCount - 1)
                 .then(resolve)
                 .catch(reject);
-            }, 2000);
+            }, 1000);
           }
         } else {
           if (retryCount > 0) {
@@ -183,7 +184,7 @@ function checkSellOrderStatusWithRetry(orderId, retryCount = 3) {
               checkSellOrderStatusWithRetry(orderId, retryCount - 1)
                 .then(resolve)
                 .catch(reject);
-            }, 2000);
+            }, 1000);
           } else {
             reject("Failed to fetch sell order status.");
           }
@@ -196,7 +197,7 @@ function checkSellOrderStatusWithRetry(orderId, retryCount = 3) {
             checkSellOrderStatusWithRetry(orderId, retryCount - 1)
               .then(resolve)
               .catch(reject);
-          }, 2000);
+          }, 1000);
         } else {
           reject(error);
         }
@@ -229,7 +230,7 @@ function executeOrders(iteration) {
                   );
                   // Check buy order status
                   checkOrderStatusWithRetry(response.data.data.order_id)
-                    .then((instrumentToken) => {
+                    .then(() => {
                       // Place sell order after buy order completion
                       placeSellOrder(instrumentToken, lastPrice - 1)
                         .then((response) => {
@@ -245,7 +246,7 @@ function executeOrders(iteration) {
                               // Wait for both buy and sell orders to complete before proceeding
                               setTimeout(() => {
                                 executeOrders(iteration + 1);
-                              }, 2000);
+                              }, 1000);
                             })
                             .catch((error) => {
                               console.log(
@@ -280,8 +281,6 @@ function executeOrders(iteration) {
       });
   }
 }
-
-
 
 // Start executing the orders
 executeOrders(0);
