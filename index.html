@@ -1,24 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Electron App</title>
 </head>
 <body>
-  <button id="startProcess">Start Authentication Process</button>
-  <script>
-    const { ipcRenderer } = window;
+  <h1>Electron App</h1>
+  <div id="accessToken"></div>
+  <button id="startProcess">Start Process</button>
 
-    document.getElementById('startProcess').addEventListener('click', () => {
-      ipcRenderer.send('openExternalURL', 'https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=450f5a3d-24a0-4660-8552-5e84eaa857c2&redirect_uri=http://localhost:3000/callback');
+  <script>
+    // Function to handle button click event
+    document.getElementById('startProcess').addEventListener('click', function() {
+      // Open the first API URL in the default external browser
+      require('electron').shell.openExternal('https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=450f5a3d-24a0-4660-8552-5e84eaa857c2&redirect_uri=http://localhost:3000/callback');
     });
 
-    ipcRenderer.on('authorizationResponse', (event, currentURL) => {
-      if (currentURL.startsWith('http://localhost:3000/callback')) {
-        console.log('Authorization response:', currentURL);
-        // Handle the response URL as needed
-      }
+    // Wait until the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Now that the DOM is fully loaded, we can safely use `require` to access `ipcRenderer`
+      const { ipcRenderer } = require('electron');
+
+      // Listen for access-token event from the main process
+      ipcRenderer.on('access-token', (event, accessToken) => {
+        console.log('Access token received:', accessToken);
+        document.getElementById('accessToken').innerText = `Access Token: ${accessToken}`;
+      });
     });
   </script>
 </body>

@@ -1,4 +1,4 @@
-const { app, shell } = require('electron');
+const { app, BrowserWindow, shell } = require('electron');
 const express = require('express');
 const url = require('url');
 const axios = require('axios');
@@ -38,6 +38,8 @@ expressApp.get('/callback', (req, res) => {
   axios.request(config)
     .then((response) => {
       console.log('Token response:', response.data);
+      // Send the access_token to the renderer process
+      mainWindow.webContents.send('access-token', response.data.access_token);
       res.send('Callback received successfully. You can close this window.');
     })
     .catch((error) => {
@@ -47,6 +49,17 @@ expressApp.get('/callback', (req, res) => {
 });
 
 function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true, // Ensure Node.js integration is enabled
+      contextIsolation: false
+    }
+  });
+
+  mainWindow.loadURL(`file://${__dirname}/index.html`);
+
   // Open the URL in the default external browser
   shell.openExternal('https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=450f5a3d-24a0-4660-8552-5e84eaa857c2&redirect_uri=http://localhost:3000/callback');
 
