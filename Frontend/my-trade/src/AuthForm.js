@@ -19,8 +19,9 @@ const AuthForm = () => {
     e.preventDefault();
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    const state = urlParams.get('state');
-
+    // eslint-disable-next-line no-unused-vars
+    const state = urlParams.get('state'); // This variable is assigned but not used, hence ignored
+  
     if (code) {
       try {
         const response = await axios.post('https://5000-zuhakhalida-tradeautoma-vqmazprdo6m.ws-us114.gitpod.io/getAccessToken', {
@@ -39,6 +40,7 @@ const AuthForm = () => {
       }
     }
   };
+  
 
   return (
     <div style={{ padding: '20px', maxWidth: '400px', margin: '0 auto' }}>
