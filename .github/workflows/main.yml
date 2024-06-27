@@ -13,21 +13,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '14'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd Frontend/my-trade  # Navigate to your frontend directory
+          npm install
 
       - name: Build the app
-        run: npm run build
-        working-directory: Frontend/my-trade  # Adjust to your actual frontend directory
+        run: |
+          cd Frontend/my-trade  # Navigate to your frontend directory
+          npm run build
 
       - name: Deploy to Netlify
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}  # Add this secret in your GitHub repository settings
         run: |
           npm install -g netlify-cli
-          netlify deploy --prod --dir=./Frontend/my-trade/build --auth=$NETLIFY_AUTH_TOKEN
+          netlify deploy --prod --dir=./build --auth=$NETLIFY_AUTH_TOKEN  # Specify the build directory relative to the current directory
