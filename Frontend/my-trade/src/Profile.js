@@ -1,17 +1,22 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 const Profile = () => {
-  // Retrieve access token from localStorage
-  const accessToken = localStorage.getItem('accessToken');
+  const location = useLocation();
+  const authCode = location.state?.authCode;
 
   return (
     <div style={{ padding: '20px', maxWidth: '400px', margin: '0 auto' }}>
       <h2>User Profile</h2>
-      <div>
-        <h3>Access Token:</h3>
-        <p>{accessToken}</p>
-      </div>
-      {/* Add other profile information here */}
+      {authCode && (
+        <div>
+          <h3>Access Token:</h3>
+          {/* <pre>{JSON.stringify(authCode, null, 2)}</pre> */}
+          <pre>Email:{JSON.stringify(authCode.email, null, 2)}</pre>
+          <pre>User Name:{JSON.stringify(authCode.user_name, null, 2)}</pre>
+          <pre>Access_Token:{JSON.stringify(authCode.access_token, null, 2)}</pre>
+        </div>
+      )}
     </div>
   );
 };

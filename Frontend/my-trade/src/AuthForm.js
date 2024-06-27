@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
+import { useNavigate } from 'react-router-dom';
 
 const AuthForm = () => {
   const [clientId, setClientId] = useState('');
   const [redirectUri, setRedirectUri] = useState('https://3000-zuhakhalida-tradeautoma-vqmazprdo6m.ws-us114.gitpod.io/');
   const [authCode, setAuthCode] = useState(null);
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,8 +32,8 @@ const AuthForm = () => {
         setAuthCode(response.data);
         // Store access token in localStorage
         localStorage.setItem('accessToken', response.data.access_token);
-        // Redirect to profile page
-        navigate('/profile');
+        // Redirect to profile page with authCode as parameter
+        navigate('/profile', { state: { authCode: response.data } });
       } catch (error) {
         console.error(error);
       }
