@@ -13,7 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-<<<<<<< HEAD
       - name: Install Netlify CLI
         run: npm install -g netlify-cli
 
@@ -24,23 +23,3 @@ jobs:
           npm install
           npm run build
           netlify deploy --prod --dir=./build --auth=$NETLIFY_AUTH_TOKEN
-=======
-      - name: Install Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build the app
-        run: npm run build
-        working-directory: Frontend/my-trade  # Adjust to your actual frontend directory
-
-      - name: Deploy to Netlify
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}  # Add this secret in your GitHub repository settings
-        run: |
-          npm install -g netlify-cli
-          netlify deploy --prod --dir=./Frontend/my-trade/build --auth=$NETLIFY_AUTH_TOKEN
->>>>>>> 5143577 (yml file fix)
