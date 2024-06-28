@@ -19,26 +19,26 @@ const AuthForm = () => {
     e.preventDefault();
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    const state = urlParams.get('state'); // This variable is assigned but not used, hence ignored
-
+    // eslint-disable-next-line no-unused-vars
+    const state = urlParams.get('state');
+    
     if (code) {
       try {
-        const response = await axios.post(process.env.REACT_APP_SERVER_URL, {
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/getAccessToken`, {
           code,
           client_id: clientId,
           client_secret: process.env.REACT_APP_CLIENT_SECRET,
-          redirect_uri: redirectUri,
+          redirect_uri: process.env.REACT_APP_REDIRECT_URI,
         });
         setAuthCode(response.data);
-        // Store access token in localStorage
         localStorage.setItem('accessToken', response.data.access_token);
-        // Redirect to profile page with authCode as parameter
         navigate('/profile', { state: { authCode: response.data } });
       } catch (error) {
         console.error(error);
       }
     }
   };
+  
 
   return (
     <div style={{ padding: '20px', maxWidth: '400px', margin: '0 auto' }}>
