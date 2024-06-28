@@ -22,7 +22,7 @@ const AuthForm = () => {
 
     if (code) {
       try {
-        const response = await axios.post('/.netlify/functions/getAccessToken', {  // <-- Updated endpoint
+        const response = await axios.post('/netlify/functions/getAccessToken', {  // <-- Updated endpoint
           code,
           client_id: clientId,
           client_secret: process.env.REACT_APP_CLIENT_SECRET,
