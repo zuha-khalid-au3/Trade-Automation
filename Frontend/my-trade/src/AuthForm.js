@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 
 const AuthForm = () => {
   const [clientId, setClientId] = useState('');
-  const [redirectUri, setRedirectUri] = useState('https://3000-zuhakhalida-tradeautoma-vqmazprdo6m.ws-us114.gitpod.io/');
+  const [redirectUri, setRedirectUri] = useState(process.env.REACT_APP_REDIRECT_URI);
   const [authCode, setAuthCode] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const baseUrl = 'https://api.upstox.com/v2/login/authorization/dialog';
+    const baseUrl = process.env.REACT_APP_BASE_URL;
     const url = `${baseUrl}?response_type=code&client_id=${encodeURIComponent(clientId)}&redirect_uri=${encodeURIComponent(redirectUri)}`;
     window.location.href = url;
   };
@@ -19,15 +19,14 @@ const AuthForm = () => {
     e.preventDefault();
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    // eslint-disable-next-line no-unused-vars
     const state = urlParams.get('state'); // This variable is assigned but not used, hence ignored
-  
+
     if (code) {
       try {
-        const response = await axios.post('https://5000-zuhakhalida-tradeautoma-vqmazprdo6m.ws-us114.gitpod.io/getAccessToken', {
+        const response = await axios.post(process.env.REACT_APP_SERVER_URL, {
           code,
           client_id: clientId,
-          client_secret: 'etgnuwhlzt', // replace with your actual client secret
+          client_secret: process.env.REACT_APP_CLIENT_SECRET,
           redirect_uri: redirectUri,
         });
         setAuthCode(response.data);
@@ -40,7 +39,6 @@ const AuthForm = () => {
       }
     }
   };
-  
 
   return (
     <div style={{ padding: '20px', maxWidth: '400px', margin: '0 auto' }}>
