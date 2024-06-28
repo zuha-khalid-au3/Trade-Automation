@@ -19,12 +19,10 @@ const AuthForm = () => {
     e.preventDefault();
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    // eslint-disable-next-line no-unused-vars
-    const state = urlParams.get('state');
-    
+
     if (code) {
       try {
-        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/getAccessToken`, {
+        const response = await axios.post('/.netlify/functions/getAccessToken', {  // <-- Updated endpoint
           code,
           client_id: clientId,
           client_secret: process.env.REACT_APP_CLIENT_SECRET,
@@ -38,7 +36,6 @@ const AuthForm = () => {
       }
     }
   };
-  
 
   return (
     <div style={{ padding: '20px', maxWidth: '400px', margin: '0 auto' }}>
