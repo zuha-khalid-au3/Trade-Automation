@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const AuthForm = () => {
-  const [clientId, setClientId] = useState('');
+  const [clientId, setClientId] = useState('450f5a3d-24a0-4660-8552-5e84eaa857c2');
   const [redirectUri, setRedirectUri] = useState(process.env.REACT_APP_REDIRECT_URI);
   const [authCode, setAuthCode] = useState(null);
   const navigate = useNavigate();
