@@ -22,7 +22,7 @@ const AuthForm = () => {
 
     if (code) {
       try {
-        const response = await axios.post('https://5000-zuhakhalida-tradeautoma-gid9hof8x35.ws-us115.gitpod.io/getAccessToken', {  // <-- Updated endpoint
+        const response = await axios.post('https://5000-zuhakhalida-tradeautoma-4xtrszvqwd0.ws-us115.gitpod.io/getAccessToken', {  // <-- Updated endpoint
           code,
           client_id: clientId,
           client_secret: process.env.REACT_APP_CLIENT_SECRET,
