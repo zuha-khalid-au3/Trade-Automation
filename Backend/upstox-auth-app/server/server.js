@@ -93,7 +93,7 @@ app.post('/getInstrumentKey', (req, res) => {
   console.log('Request Body:', req.body);
 
   // Default date if not provided
-  const defaultDate = '30Apr24';
+  const defaultDate = '23Jul24';
 
   // Function to format the trading symbol
   function formatTradingSymbol(name, instrumentType, strikePrice, date) {
