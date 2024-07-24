@@ -1,18 +1,12 @@
 // Profile.js
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const authCode = location.state?.authCode || JSON.parse(localStorage.getItem('accessToken'));
-
-  useEffect(() => {
-    if (!authCode) {
-      navigate('/');
-    }
-  }, [authCode, navigate]);
+  const authCode = location.state?.authCode;
 
   const handleLogout = async () => {
     const url = 'https://api.upstox.com/v2/logout';
@@ -41,12 +35,14 @@ const Profile = () => {
       </header>
       <h2>User Profile</h2>
       {authCode ? (
-        <div>
-          <h3>Access Token Details:</h3>
-          <pre>Email: {authCode.email}</pre>
-          <pre>User Name: {authCode.user_name}</pre>
-          <pre>Access Token: {authCode.access_token}</pre>
-        </div>
+        <>
+          <div>
+            <h3>Access Token Details:</h3>
+            <pre>Email: {authCode.email}</pre>
+            <pre>User Name: {authCode.user_name}</pre>
+            <pre>Access Token: {authCode.access_token}</pre>
+          </div>
+        </>
       ) : (
         <p>No user details available. Please log in again.</p>
       )}
