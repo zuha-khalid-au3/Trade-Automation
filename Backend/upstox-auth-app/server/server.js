@@ -1,43 +1,3 @@
-// const express = require('express');
-// const axios = require('axios');
-// const bodyParser = require('body-parser');
-// const cors = require('cors');
-
-// const app = express();
-// const port = 5000;
-
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
-// app.use(cors());
-
-// app.post('/getAccessToken', async (req, res) => {
-//   const { code, client_id, client_secret, redirect_uri } = req.body;
-//   try {
-//     const response = await axios.post('https://api.upstox.com/v2/login/authorization/token', null, {
-//       params: {
-//         code,
-//         client_id,
-//         client_secret,
-//         redirect_uri,
-//         grant_type: 'authorization_code',
-//       },
-//       headers: {
-//         'Content-Type': 'application/x-www-form-urlencoded',
-//         Accept: 'application/json',
-//       },
-//     });
-//     res.json(response.data);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-
-// app.listen(port, () => {
-//   console.log(`Server running on http://localhost:${port}`);
-// });
-
-
-
 const express = require('express');
 const fs = require('fs');
 const bodyParser = require('body-parser');
@@ -93,7 +53,7 @@ app.post('/getInstrumentKey', (req, res) => {
   console.log('Request Body:', req.body);
 
   // Default date if not provided
-  const defaultDate = '23Jul24';
+  const defaultDate = '25Jul24';
 
   // Function to format the trading symbol
   function formatTradingSymbol(name, instrumentType, strikePrice, date) {
@@ -108,9 +68,13 @@ app.post('/getInstrumentKey', (req, res) => {
     return entry ? entry.instrument_key : null;
   }
 
-  // Function to format the date string
+  // Function to format the date string from YYYY-MM-DD to DDMMMYY
   function formatDateString(date) {
-    return `${date.slice(0, 2)} ${date.slice(2, 5)} ${date.slice(5)}`;
+    const dateObj = new Date(date);
+    const day = dateObj.getDate();
+    const month = dateObj.toLocaleString('en-US', { month: 'short' });
+    const year = dateObj.getFullYear().toString().slice(2);
+    return `${day} ${month} ${year}`;
   }
 
   // Read the JSON file
@@ -125,12 +89,12 @@ app.post('/getInstrumentKey', (req, res) => {
       const dataArray = JSON.parse(data);
 
       // Format the date string and trading symbol
-      const formattedDate = date.trim() === '' ? defaultDate : date;
+      const formattedDate = date.trim() === '' ? defaultDate : formatDateString(date);
       const formattedTradingSymbol = formatTradingSymbol(
         name,
         instrumentType,
         strikePrice,
-        formatDateString(formattedDate)
+        formattedDate
       );
 
       // Get the instrument key
