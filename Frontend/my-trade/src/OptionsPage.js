@@ -15,7 +15,7 @@ const OptionsPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = `${process.env.REACT_APP_SERVER_URL}/getAccessToken/getInstrumentKey`; // Replace with your backend API URL
+    const url = `${process.env.REACT_APP_SERVER_URL}/getInstrumentKey`; // Replace with your backend API URL
     const headers = {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
