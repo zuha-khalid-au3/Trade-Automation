@@ -1,5 +1,5 @@
 // OptionsPage.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -11,14 +11,7 @@ const OptionsPage = () => {
   const [date, setDate] = useState('');
   const [instrumentKey, setInstrumentKey] = useState(null);
   const [error, setError] = useState(null);
-  
-  const authCode = JSON.parse(localStorage.getItem('accessToken'));
-
-  useEffect(() => {
-    if (!authCode) {
-      navigate('/');
-    }
-  }, [authCode, navigate]);
+  const [authCode, setAuthCode] = useState(JSON.parse(localStorage.getItem('accessToken')));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -111,7 +104,6 @@ const OptionsPage = () => {
         </div>
         <button type="submit" style={{ marginTop: '10px', padding: '10px 20px' }}>Submit</button>
       </form>
-
       {instrumentKey && (
         <div>
           <h3>Instrument Key:</h3>
