@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 
 const OptionsPage = () => {
@@ -8,7 +10,7 @@ const OptionsPage = () => {
   const [name, setName] = useState('');
   const [instrumentType, setInstrumentType] = useState('');
   const [strikePrice, setStrikePrice] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(new Date());
   const [instrumentKey, setInstrumentKey] = useState(null);
   const [error, setError] = useState(null);
   const accessToken = localStorage.getItem('accessToken'); // Directly retrieve the access token
@@ -26,7 +28,7 @@ const OptionsPage = () => {
         name,
         instrumentType,
         strikePrice,
-        date: date.trim() === '' ? '30Apr24' : date,
+        date: date ? date.toISOString().split('T')[0] : '30Apr24',
       }, { headers });
 
       setInstrumentKey(response.data.instrumentKey);
@@ -82,15 +84,24 @@ const OptionsPage = () => {
         )}
         <div className="form-group">
           <label>Instrument Type:</label>
-          <input type="text" className="form-control" value={instrumentType} onChange={(e) => setInstrumentType(e.target.value)} required />
+          <select className="form-control" value={instrumentType} onChange={(e) => setInstrumentType(e.target.value)} required>
+            <option value="">Select</option>
+            <option value="ce">CE</option>
+            <option value="pe">PE</option>
+          </select>
         </div>
         <div className="form-group">
           <label>Strike Price:</label>
           <input type="text" className="form-control" value={strikePrice} onChange={(e) => setStrikePrice(e.target.value)} required />
         </div>
         <div className="form-group">
-          <label>Date (leave empty for default):</label>
-          <input type="text" className="form-control" value={date} onChange={(e) => setDate(e.target.value)} />
+          <label>Date:</label>
+          <DatePicker
+            selected={date}
+            onChange={(date) => setDate(date)}
+            minDate={new Date()}
+            className="form-control"
+          />
         </div>
         <button type="submit" className="btn btn-primary mt-3">Submit</button>
       </form>
