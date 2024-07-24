@@ -22,7 +22,7 @@ const AuthForm = () => {
 
     if (code) {
       try {
-        const response = await axios.post('process.env.REACT_APP_SERVER_URL', {  // <-- Updated endpoint
+        const response = await axios.post(process.env.REACT_APP_SERVER_URL, {
           code,
           client_id: clientId,
           client_secret: process.env.REACT_APP_CLIENT_SECRET,
