@@ -11,13 +11,13 @@ const OptionsPage = () => {
   const [date, setDate] = useState('');
   const [instrumentKey, setInstrumentKey] = useState(null);
   const [error, setError] = useState(null);
-  const authCode = JSON.parse(localStorage.getItem('accessToken'));
+  const accessToken = localStorage.getItem('accessToken'); // Directly retrieve the access token
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = 'https://5000-zuhakhalida-tradeautoma-j3gpuxzd16m.ws-us115.gitpod.io/getInstrumentKey'; // Replace with your backend API URL
     const headers = {
-      'Authorization': `Bearer ${authCode.access_token}`,
+      'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     };
 
@@ -41,7 +41,7 @@ const OptionsPage = () => {
     const url = 'https://api.upstox.com/v2/logout';
     const headers = {
       'Accept': 'application/json',
-      'Authorization': `Bearer ${authCode.access_token}`
+      'Authorization': `Bearer ${accessToken}`
     };
 
     try {
