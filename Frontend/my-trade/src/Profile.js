@@ -5,7 +5,7 @@ import axios from 'axios';
 const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [authCode, setAuthCode] = useState(location.state?.authCode || JSON.parse(localStorage.getItem('accessToken')));
+  const authCode = location.state?.authCode || JSON.parse(localStorage.getItem('accessToken'));
   const [name, setName] = useState('');
   const [instrumentType, setInstrumentType] = useState('');
   const [strikePrice, setStrikePrice] = useState('');
@@ -39,8 +39,8 @@ const Profile = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    const url = 'https://5000-zuhakhalida-tradeautoma-iw2r8jezldr.ws-us115.gitpod.io/getInstrumentKey'; // Replace with your backend API URL
+    e.preventDefault();
+    const url = 'https://5000-zuhakhalida-tradeautoma-j3gpuxzd16m.ws-us115.gitpod.io/getInstrumentKey'; // Replace with your backend API URL
     const headers = {
       'Authorization': `Bearer ${authCode.access_token}`,
       'Content-Type': 'application/json',
