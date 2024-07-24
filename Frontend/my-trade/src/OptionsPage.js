@@ -11,7 +11,7 @@ const OptionsPage = () => {
   const [date, setDate] = useState('');
   const [instrumentKey, setInstrumentKey] = useState(null);
   const [error, setError] = useState(null);
-  const [authCode, setAuthCode] = useState(JSON.parse(localStorage.getItem('accessToken')));
+  const authCode = JSON.parse(localStorage.getItem('accessToken'));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
