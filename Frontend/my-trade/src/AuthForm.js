@@ -23,7 +23,7 @@ const AuthForm = () => {
 
     if (code) {
       try {
-        const response = await axios.post(process.env.REACT_APP_SERVER_URL, {
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/getAccessToken`, {
           code,
           client_id: clientId,
           client_secret: process.env.REACT_APP_CLIENT_SECRET,
