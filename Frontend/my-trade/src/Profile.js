@@ -1,7 +1,7 @@
-// Profile.js
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 
 const Profile = () => {
   const location = useLocation();
@@ -28,21 +28,19 @@ const Profile = () => {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-      <header className="App-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <button onClick={() => navigate('/options')} style={{ padding: '10px 20px' }}>Options</button>
-        <button onClick={handleLogout} style={{ padding: '10px 20px' }}>Logout</button>
+    <div className="container mt-5">
+      <header className="d-flex justify-content-between align-items-center mb-4">
+        <button className="btn btn-outline-primary" onClick={() => navigate('/options')}>Options</button>
+        <button className="btn btn-outline-danger" onClick={handleLogout}>Logout</button>
       </header>
       <h2>User Profile</h2>
       {authCode ? (
-        <>
-          <div>
-            <h3>Access Token Details:</h3>
-            <pre>Email: {authCode.email}</pre>
-            <pre>User Name: {authCode.user_name}</pre>
-            <pre>Access Token: {authCode.access_token}</pre>
-          </div>
-        </>
+        <div>
+          <h3>Access Token Details:</h3>
+          <pre>Email: {authCode.email}</pre>
+          <pre>User Name: {authCode.user_name}</pre>
+          <pre>Access Token: {authCode.access_token}</pre>
+        </div>
       ) : (
         <p>No user details available. Please log in again.</p>
       )}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 
 const AuthForm = () => {
   const [clientId, setClientId] = useState('450f5a3d-24a0-4660-8552-5e84eaa857c2');
@@ -38,40 +39,36 @@ const AuthForm = () => {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '400px', margin: '0 auto' }}>
+    <div className="container mt-5">
       <h2>Upstox Authorization</h2>
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '10px' }}>
-          <label>
-            Client ID:
-            <input
-              type="text"
-              value={clientId}
-              onChange={(e) => setClientId(e.target.value)}
-              required
-              style={{ width: '100%', padding: '8px', margin: '5px 0' }}
-            />
-          </label>
+        <div className="form-group">
+          <label>Client ID:</label>
+          <input
+            type="text"
+            className="form-control"
+            value={clientId}
+            onChange={(e) => setClientId(e.target.value)}
+            required
+          />
         </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label>
-            Redirect URI:
-            <input
-              type="text"
-              value={redirectUri}
-              onChange={(e) => setRedirectUri(e.target.value)}
-              required
-              style={{ width: '100%', padding: '8px', margin: '5px 0' }}
-            />
-          </label>
+        <div className="form-group">
+          <label>Redirect URI:</label>
+          <input
+            type="text"
+            className="form-control"
+            value={redirectUri}
+            onChange={(e) => setRedirectUri(e.target.value)}
+            required
+          />
         </div>
-        <button type="submit" style={{ padding: '10px 20px' }}>Authorize</button>
+        <button type="submit" className="btn btn-primary mt-3">Authorize</button>
       </form>
-      <form onSubmit={handleGetAccessToken}>
-        <button type="submit" style={{ padding: '10px 20px', marginTop: '20px' }}>Get Access Token</button>
+      <form onSubmit={handleGetAccessToken} className="mt-3">
+        <button type="submit" className="btn btn-secondary">Get Access Token</button>
       </form>
       {authCode && (
-        <div>
+        <div className="mt-3">
           <h3>Access Token:</h3>
           <pre>{JSON.stringify(authCode, null, 2)}</pre>
         </div>

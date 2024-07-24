@@ -1,7 +1,7 @@
-// OptionsPage.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 
 const OptionsPage = () => {
   const navigate = useNavigate();
@@ -57,60 +57,50 @@ const OptionsPage = () => {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-      <header className="App-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <button onClick={() => navigate('/profile')} style={{ padding: '10px 20px' }}>Home</button>
-        <button onClick={handleLogout} style={{ padding: '10px 20px' }}>Logout</button>
+    <div className="container mt-5">
+      <header className="d-flex justify-content-between align-items-center mb-4">
+        <button className="btn btn-outline-primary" onClick={() => navigate('/profile')}>Home</button>
+        <button className="btn btn-outline-danger" onClick={handleLogout}>Logout</button>
       </header>
       <h2>Options Page</h2>
-      <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
-        <div>
-          <label>
-            Select Name:
-            <select value={name} onChange={(e) => setName(e.target.value)} required>
-              <option value="">Select</option>
-              <option value="nifty">Nifty</option>
-              <option value="banknifty">BankNifty</option>
-              <option value="finnifty">FinNifty</option>
-              <option value="custom">Custom</option>
-            </select>
-          </label>
+      <form onSubmit={handleSubmit} className="mt-3">
+        <div className="form-group">
+          <label>Select Name:</label>
+          <select className="form-control" value={name} onChange={(e) => setName(e.target.value)} required>
+            <option value="">Select</option>
+            <option value="nifty">Nifty</option>
+            <option value="banknifty">BankNifty</option>
+            <option value="finnifty">FinNifty</option>
+            <option value="custom">Custom</option>
+          </select>
         </div>
         {name === 'custom' && (
-          <div>
-            <label>
-              Custom Name:
-              <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-            </label>
+          <div className="form-group">
+            <label>Custom Name:</label>
+            <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
           </div>
         )}
-        <div>
-          <label>
-            Instrument Type:
-            <input type="text" value={instrumentType} onChange={(e) => setInstrumentType(e.target.value)} required />
-          </label>
+        <div className="form-group">
+          <label>Instrument Type:</label>
+          <input type="text" className="form-control" value={instrumentType} onChange={(e) => setInstrumentType(e.target.value)} required />
         </div>
-        <div>
-          <label>
-            Strike Price:
-            <input type="text" value={strikePrice} onChange={(e) => setStrikePrice(e.target.value)} required />
-          </label>
+        <div className="form-group">
+          <label>Strike Price:</label>
+          <input type="text" className="form-control" value={strikePrice} onChange={(e) => setStrikePrice(e.target.value)} required />
         </div>
-        <div>
-          <label>
-            Date (leave empty for default):
-            <input type="text" value={date} onChange={(e) => setDate(e.target.value)} />
-          </label>
+        <div className="form-group">
+          <label>Date (leave empty for default):</label>
+          <input type="text" className="form-control" value={date} onChange={(e) => setDate(e.target.value)} />
         </div>
-        <button type="submit" style={{ marginTop: '10px', padding: '10px 20px' }}>Submit</button>
+        <button type="submit" className="btn btn-primary mt-3">Submit</button>
       </form>
       {instrumentKey && (
-        <div>
+        <div className="mt-3">
           <h3>Instrument Key:</h3>
           <p>{instrumentKey}</p>
         </div>
       )}
-      {error && <div style={{ color: 'red' }}>{error}</div>}
+      {error && <div className="text-danger mt-3">{error}</div>}
     </div>
   );
 };
